@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title> Paul Sungyub Lim </title>
+	<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/common.css') }}">
+	<link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/favicon.jpeg') }}">
+
+	{% block link %}
+	{% endblock link %}
+ </head>
+
+
+<body>
+	<nav>
+		<div class='header'>
+			<a href='/home'>
+				<div class='name'>
+					Paul Lim
+				</div>
+			</a>
+			<a href='/home'>HOME</a>
+			<a href='/projects'>PROJECTS</a>
+			<a href='/blog'>BLOG</a>
+			<a href='/contact'>CONTACT</a>
+		</div>
+		<div class='contact-info'>
+			<a href='https://www.github.com/plim0793' target='_blank'>
+				<img src="{{ url_for('static', filename='images/github.png') }}" class='icon'></img>
+			</a>
+			<a href='https://www.linkedin.com/in/plim0793/' target="_blank">
+				<img src="{{ url_for('static', filename='images/linkedin.png') }}" class='icon'></img>
+			</a>
+			<a href='mailto:plim0793@gmail.com'>
+				<img src="{{ url_for('static', filename='images/gmail.jpeg') }}" class='icon'></img>
+			</a>
+		</div>
+	</nav>
+	<div class='content'>
+	{% block content %}
+	{% endblock content %}
+	</div>
+</body>
+</html>

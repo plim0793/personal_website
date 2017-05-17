@@ -1,0 +1,321 @@
+<html>
+<head>
+{% extends "base.html" %}
+	{% block link %}
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    	<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/projects/stackoverflow.css') }}">
+    	<script src="http://d3js.org/d3.v2.min.js"></script>
+		<script src="{{ url_for('static', filename='js/stackoverflow.js') }}"></script>
+		<style>
+	#power-gauge g.arc {
+		fill: steelblue;
+	}
+
+	#power-gauge g.pointer {
+		fill: #e85116;
+		stroke: #b64011;
+	}
+	
+	#power-gauge g.label text {
+		text-anchor: middle;
+		font-size: 14px;
+		font-weight: bold;
+		fill: #666;
+	}
+
+	.gauge {
+		padding: 25px;
+		</style>
+	}
+	{% endblock link %}
+</head>
+
+<body>
+	<nav>
+	{{ super() }}
+	</nav>
+		{% block content %}	
+		<div class=page-wrapper>
+			<h1>How to Get Your Stackoverflow Question Answered!</h1>
+			<p>
+			<b>Complete python script can be found here:
+			<a href="https://github.com/plim0793/Project_McNulty" target="_blank">Project McNulty</a>
+			</b>
+			</p>
+			<h2>Motivation</h2>
+			<p>
+			From aspiring data scientists to senior level software engineers, I doubt there has been a single person that hasn't used <b>stackoverflow</b> to get a question answered.  Although searching for an existing question usually works out well, what happens if you can't find a relevant answer to your specific question?  This classification model will help you determine if your question will be answered quickly or (relatively) slowly.
+			</p>
+			<h2>First Steps</h2>
+			<p>
+			To start off, the dataset was scraped from stackoverflow directly.  For each question page, the answers, user info, and view count were compiled into pandas dataframes.  The scraping process was all done on an <b>Amazon Web Services (AWS)</b> instance and the databases were stored in the AWS server in PostgreSQL tables.
+			</p>
+			<h2>Preliminary Findings</h2>
+			<p>
+			Here is the breakdown of answering times for the ~200K questions that were scraped.  I limited the database to questions being answered within a day since users are realistically needing their question answered within a few hours to a day.
+			</p>
+			<img src="{{ url_for('static', filename='images/stackoverflow/hist.png') }}" class="hist"></img>
+			<p>
+			From the plot above, its clear that the answering times for stackoverflow questions are very fast!  In fact, the median time is around ~30 minutes or so.  But, what if you need that question answered in under 10 or 5 minutes?  What factors are important in decreasing the answering time?
+			</p>
+			<h2>Modeling Process</h2>
+			<p>
+			This problem can be answered by classifying the answering times into two classes: "quick" answers and "slow" answers.  The positive label will be the quick answers since that is what we are interested in and the slow answers will be the negative label.  Since the median answering time is ~30 minutes, that will be the cutoff point between these two classes.  
+			</p>
+			<p>
+			After running a randomized grid search cross-validation algorithm on a variety of classification models <i>(e.g. Logistic Regression, SVC, Gradient Descent, Naive Bayes)</i>, the model with the best tradeoff between computation time and scoring metrics was <b>Multinomial Naive Bayes</b>.  
+			</p>
+			<p>
+			The ensemble method of <b>stacking</b> was the next step in the modeling process. With the Multinomial Naive Bayes model as one of the base models, I tested a few other models such as Random Forest, K-Nearest Neighbors, and Logistic Regression as the second base model.  In the end, I stacked the <b>Multinomial Naive Bayes model</b> with the <b>Random Forest with 50 estimators model</b> together.  The outputs of these two base models became the features for my stacked model which was trained and tested with a Logistic Regression model.
+			</p>
+			<img src="{{ url_for('static', filename='images/stackoverflow/prec_rec_curve.png') }}" class="hist"></img>
+			<p>
+			Above is the <b>Precision vs Recall curve</b>.  The tradeoff between precision and recall needs to be made.  Since I don't want to lead a user to <i>falsely</i> believe their question will be answered quickly, I focused more on the precision score.  As a result, I chose the FBeta with a 0.5 weight to be the scoring metric.  For the stacked model the FBeta was ~0.70  
+			</p>
+			<h2>Test Your Question Here!</h2>
+			<p>
+			Using <b>Flask, JQuery, and d3 visualizations</b>, I created a small web application where sample questions can be entered and analyzed to predict the probability of that question being answered.
+			</p>
+			<p>
+			The model that is working behind the scenes in this web app is a stacked model consisted of a Multinomial Naive Bayes model and Random Forest model.  This model finds the <i>term frequency-inverse document frequency (tf-idf)</i> from the question title and question body.  
+			</p>
+			<form method="POST">
+			{{ form.csrf_token }}
+				<div class="row">
+					<div class="three columns">
+					{{ form.q_title.label }} {{ form.q_title() }}
+					</div>
+					
+					<div class="three columns">
+					{{ form.q_body.label }} {{ form.q_body() }}
+					</div>
+				</div>
+			</form>
+			<button type="submit" onclick="myFunction()">SUBMIT</button>
+
+			{% if pred %}
+				<div class="row">
+					<div class="six columns">
+						<h2 id="pred-type">{{ pred }}</h2>
+						<h2 id="pred-prob">Probability: {{ prob_str }}</h2>
+					</div>
+				</div>
+			{% endif %}
+
+			<div id="power-gauge"></div>
+			
+			<h2>Conclusions and Future Steps</h2>
+			<p>
+			Working with text features rather than numerical features was difficult because I had to adjust the way I did feature engineering.  Working with text frequency, sentiment analysis and other NLP methods was very different from working with numerical features.  However, this was a great learning experience.
+			</p>
+			<p>
+			Based on the model, the more detailed your question is the faster your question will be answered.  In order to improve this model, I could include a feature that takes into account the difficulty of the problem since harder problems would have less people who could answer that particular question.
+			</p>
+
+		</div>
+		<script>
+		var gauge = function(container, configuration) {
+			var that = {};
+			var config = {
+				size						: 200,
+				clipWidth					: 200,
+				clipHeight					: 110,
+				ringInset					: 20,
+				ringWidth					: 20,
+				
+				pointerWidth				: 10,
+				pointerTailLength			: 5,
+				pointerHeadLengthPercent	: 0.9,
+				
+				minValue					: 0,
+				maxValue					: 100,
+				
+				minAngle					: -90,
+				maxAngle					: 90,
+				
+				transitionMs				: 750,
+				
+				majorTicks					: 10,
+				labelFormat					: d3.format(',g'),
+				labelInset					: 10,
+				
+				// arcColorFn					: d3.interpolateHsl(d3.rgb('#e8e2ca'), d3.rgb('#3e6c0a'))
+				arcColorFn					: d3.interpolateHsl(d3.rgb('#EA1515'), d3.rgb('#0FCD1B'))
+			};
+			var range = undefined;
+			var r = undefined;
+			var pointerHeadLength = undefined;
+			var value = 0;
+			
+			var svg = undefined;
+			var arc = undefined;
+			var scale = undefined;
+			var ticks = undefined;
+			var tickData = undefined;
+			var pointer = undefined;
+
+			var donut = d3.layout.pie();
+			
+			function deg2rad(deg) {
+				return deg * Math.PI / 180;
+			}
+			
+			function newAngle(d) {
+				var ratio = scale(d);
+				var newAngle = config.minAngle + (ratio * range);
+				return newAngle;
+			}
+			
+			function configure(configuration) {
+				var prop = undefined;
+				for ( prop in configuration ) {
+					config[prop] = configuration[prop];
+				}
+				
+				range = config.maxAngle - config.minAngle;
+				r = config.size / 1;
+				pointerHeadLength = Math.round(r * config.pointerHeadLengthPercent);
+
+				// a linear scale that maps domain values to a percent from 0..1
+				scale = d3.scale.linear()
+					.range([0,1])
+					.domain([config.minValue, config.maxValue]);
+					
+				ticks = scale.ticks(config.majorTicks);
+				tickData = d3.range(config.majorTicks).map(function() {return 1/config.majorTicks;});
+				
+				arc = d3.svg.arc()
+					.innerRadius(r - config.ringWidth - config.ringInset)
+					.outerRadius(r - config.ringInset)
+					.startAngle(function(d, i) {
+						var ratio = d * i;
+						return deg2rad(config.minAngle + (ratio * range));
+					})
+					.endAngle(function(d, i) {
+						var ratio = d * (i+1);
+						return deg2rad(config.minAngle + (ratio * range));
+					});
+			}
+			that.configure = configure;
+			
+			function centerTranslation() {
+				return 'translate('+r +','+ r +')';
+			}
+			
+			function isRendered() {
+				return (svg !== undefined);
+			}
+			that.isRendered = isRendered;
+			
+			function render(newValue) {
+				svg = d3.select(container)
+					.append('svg:svg')
+						.attr('class', 'gauge')
+						.attr('width', '90%')
+						.attr('height', config.clipHeight);
+						// .attr('height', 'auto');
+
+				
+				var centerTx = centerTranslation();
+				
+				var arcs = svg.append('g')
+						.attr('class', 'arc')
+						.attr('transform', centerTx);
+				
+				arcs.selectAll('path')
+						.data(tickData)
+					.enter().append('path')
+						.attr('fill', function(d, i) {
+							return config.arcColorFn(d * i);
+						})
+						.attr('d', arc);
+				
+				var lg = svg.append('g')
+						.attr('class', 'label')
+						.attr('transform', centerTx);
+				lg.selectAll('text')
+						.data(ticks)
+					.enter().append('text')
+						.attr('transform', function(d) {
+							var ratio = scale(d);
+							var newAngle = config.minAngle + (ratio * range);
+							return 'rotate(' +newAngle +') translate(0,' +(config.labelInset - r) +')';
+						})
+						.text(config.labelFormat);
+
+				var lineData = [ [config.pointerWidth / 2, 0], 
+								[0, -pointerHeadLength],
+								[-(config.pointerWidth / 2), 0],
+								[0, config.pointerTailLength],
+								[config.pointerWidth / 2, 0] ];
+				var pointerLine = d3.svg.line().interpolate('monotone');
+				var pg = svg.append('g').data([lineData])
+						.attr('class', 'pointer')
+						.attr('transform', centerTx);
+						
+				pointer = pg.append('path')
+					.attr('d', pointerLine/*function(d) { return pointerLine(d) +'Z';}*/ )
+					.attr('transform', 'rotate(' +config.minAngle +')');
+					
+				update(newValue === undefined ? 0 : newValue);
+			}
+			that.render = render;
+			
+			function update(newValue, newConfiguration) {
+				if ( newConfiguration  !== undefined) {
+					configure(newConfiguration);
+				}
+				var ratio = scale(newValue);
+				var newAngle = config.minAngle + (ratio * range);
+				pointer.transition()
+					.duration(config.transitionMs)
+					.ease('elastic')
+					.attr('transform', 'rotate(' +newAngle +')');
+			}
+			that.update = update;
+
+			configure(configuration);
+			
+			return that;
+		};
+		</script>
+
+		<script>
+		function onDocumentReady() {
+			var powerGauge = gauge('#power-gauge', {
+				size: 300,
+				clipWidth: 600,
+				clipHeight: 400,
+				ringWidth: 60,
+				maxValue: 100,
+				transitionMs: 4000,
+			});
+			powerGauge.render();
+			
+			function updateReadings() {
+				// just pump in random data here...
+				var prob_str = document.getElementById("pred-prob").innerText.replace("Probability: ", "");
+				var prob = parseFloat(prob_str);
+				powerGauge.update(prob*100);
+			}
+			
+			// every few seconds update reading values
+			updateReadings();
+			setInterval(function() {
+				updateReadings();
+			}, 500);
+		}
+
+		if ( !window.isLoaded ) {
+			window.addEventListener("load", function() {
+				onDocumentReady();
+			}, false);
+		} else {
+			onDocumentReady();
+		}
+		</script>
+
+
+		{% endblock content %}
+</body>
+</html>

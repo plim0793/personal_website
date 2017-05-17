@@ -1,0 +1,24 @@
+.page-wrapper {
+	width: 100%;
+	margin: auto;
+	margin-top:100px;
+	margin-bottom: 100px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.home-pic {
+	max-width: 500px;
+	width: 40%;
+	min-width: 400px;
+	padding-right: 15px;
+}
+
+.homepage {
+	width: 40%;
+	max-width: 500px;
+	min-width: 400px;
+}

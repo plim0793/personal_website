@@ -1,0 +1,30 @@
+<html>
+{% extends "base.html" %}
+	{% block link %}
+	<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/contact.css') }}">
+	{% endblock link %}
+<head>
+</head>
+
+<body>
+	<nav>
+	{{ super() }}
+	</nav>
+
+	{% block content %}
+	<div class='contact'>
+		<div class='info'>
+			<h1>Feel free to contact me!</h1>
+			<p>
+			I'm currently located in the Bay Area near San Francisco.  I'm always available for a cup of coffee to chat about anything data related! Please feel free to reach out via email at <i>plim0793@gmail.com</i>
+			</p>
+			<p>
+			For more information about my background and qualifications, my resume can be found <a href="/static/etc/Paul_Lim_resume.pdf" target="_blank">here</a>
+			</p>
+
+		</div>
+	</div>
+	{% endblock content %}
+
+</body>
+</html>

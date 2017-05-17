@@ -1,0 +1,62 @@
+<html>
+<head>
+{% extends "base.html" %}
+	{% block link %}
+		<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/projects/nba.css') }}">
+	{% endblock link %}
+</head>
+
+<body>
+	<nav>
+	{{ super() }}
+	</nav>
+	{% block content %}	
+		<div class=page-wrapper>
+			<h1>Predicting Market Value of NBA Players</h1>
+			<p>
+			<b>Complete python script can be found here:
+			<a href="https://github.com/plim0793/Project-Luther" target="_blank">Project Luther</a>
+			</b>
+			</p>
+			<h2>Motivation</h2>
+			<p>
+			I love following basketball and there are always heated discussions regarding if a player has been overpaid or underpaid.  I thought it would be really interesting to see if I could end this debate by creating a regression model that could accurately predict an NBA player's market value based on their past performance.
+			</p>
+			<h2>First Steps</h2>
+			<p>
+			I needed individual player statistics as well as their salary information, so I began by looking through potential sites I could scrape data from.  I found basketball-reference.com to contain very detailed tables of all players' statistics.  The salary information was a bit more difficult to track down, but I managed to find a link on ESPN.com that provided salary information from 2000-2017.  From these two sites I scraped the necessary data and merged the data into one single dataframe.
+			</p>
+			<p>
+			Just from having domain knowledge about basketball, I knew that there was a high chance outliers would exist in the dataset. So, I performed exploratory data analysis to pinpoint these outliers.
+			</p>
+			<img src="{{ url_for('static', filename='images/nba/per_sal.png') }}"></img>
+			<p>
+			PER stands for <i>player efficiency rating</i>.  It is an advanced statistic that incorporates many different factors into a single number for players to be rated.  Average players are around 15 PER while great players are above 20 PER.  From the graph above, most players seem to aggregate around 10-15 PER and $8-15 million.  However, Vin Baker who has the absolute worst PER earned close to $20 million while Steph Curry who has one of the highest PER only made $10 million.
+			</p>
+			<p>
+			Clearly potential outliers existed in the dataset.  However, I didn't remove these potential outliers just yet since I wanted to see how well my model could predict salaries even to those extremes.
+			</p>
+			<h2>Modeling Process</h2>
+			<img src="{{ url_for('static', filename='images/nba/pred_true.png') }}"></img>
+			<p>
+			I created a function that would pipeline various regression models (e.g. Lasso, Ridge, Random Forest, Gradient Boosted Trees) and their respective hyper parameters to output the best performing model.  The best model from my function was the Gradient Boosted Regressor with 100 trees.  This model had a R-squared value of ~0.54.  The plot of the predicted vs true salaries shows that my model is overpredicting at the lower end of the salary range and underpredicting at the higher range of salaries. 
+			</p>
+			<p>
+			One interesting finding was that the <i>age</i> of a player has a huge impact on their salary.  If a player is beyond his prime, then his market value decreases no matter how good he was earlier in his career.
+			</p>
+			<h2>Conclusions and Future Steps</h2>
+			<p>
+			Feature engineering was especially difficult because of the vast amount of possible features that could weigh in on what the true market value of a player.  Also, the front office (the management in the teams who actually decide player contracts) may choose to overpay for a player because they desperately need someone to fill that position on their team.  Vice versa, players may decide to be underpaid to be on a winning team to win championships.
+			</p>
+			<p>
+			One future step I could take to improve my model would be to continue feature engineering in order to account for a player's age.  Better outlier removal would also be one step I can take to improve my model as well.
+			</p>
+			<p>
+			Overall, I was satisfied that a model based solely on a player's past performance could decently predict their market value.  With the addition of a few other features and a bit more tweaking, I believe that a model to accurately predict a player's future salary could be produced.
+			</p>
+		</div>
+
+	{% endblock content %}
+
+</body>
+</html>

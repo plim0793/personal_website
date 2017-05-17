@@ -1,0 +1,130 @@
+@media (max-width: 640px) {
+	p {
+		width: 300px;
+	}
+}
+
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+body {
+	width: 100%;
+}
+
+
+/* NAV BAR */
+nav {
+	width: 100%;
+	border-bottom: 1px solid black;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+}
+
+ nav a{
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    padding: 0;
+    margin-right: 20px;
+    font-size: 17px;
+}
+
+ nav a:hover {
+    color: #e6e9ef;
+}
+
+
+ nav .header {
+ 	list-style-type: none;
+    margin: 0;
+    padding: 30px;
+    background-color: none;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+}
+
+nav .header .name {
+	color: #365FB1;
+	font-weight: bold;
+	font-size: 24px;
+	text-align: center;
+	padding: 0;
+	margin-right: 20px;
+}
+
+nav .contact-info {
+	display: flex;
+	flex-direction: row;
+	padding: 30px;
+	align-items: center;
+}
+
+nav .contact-info .icon {
+	width: 30px;
+	height: 30px;
+}
+
+nav .contact-info a img:hover {
+	opacity: 0.2;
+}
+
+
+/* HEADER and PARAGRAPH */
+h1 {
+	font-size: 28px;
+	font-weight: bold;
+	color: #3C5071;
+	padding-bottom: 20px;
+	text-decoration: none;
+}
+
+h2 {
+	font-size: 22px;
+	font-weight: bold;
+	color: #4d7f88;
+	padding: 10px 0px 0px;
+	text-decoration: none;
+
+}
+
+p {
+	font-size: 18px;
+}
+
+p a {
+	text-decoration: none;
+	color: #365FB1;
+}
+
+p a:hover {
+    color: #e6e9ef;
+}
+
+ a:hover {
+    color: #e6e9ef;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

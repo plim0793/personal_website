@@ -1,0 +1,42 @@
+<html>
+<head>
+{% extends "base.html" %}
+	{% block link %}
+		<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/blogs/blog_post.css') }}">
+	{% endblock link %}
+</head>
+
+<body>
+	<nav>
+	{{ super() }}
+	</nav>
+	{% block content %}	
+		<div class=page-wrapper>
+		<h1>Week 4 Update</h1>
+		<h2>4 Weeks (almost) Complete!</h2>
+		<p>
+		Weeks 2-4 have been a blur to say the least.. Second project, six challenge sets, and one investigation down and there’s still 2/3 of the course left. A lot of hard work and willpower is needed to power through each day of each week, but so far this immersive program has been amazing.
+		</p>
+		<h2>Diving into Project Luther</h2>
+		<p>
+		For <a href="https://github.com/plim0793/Project-Luther" target="_blank">Project Luther</a>, I decided to predict the market value of the athletes in the <i>National Basketball Association (NBA)</i> using regression models. Before beginning the modeling process, I needed to gather data from online. This process was completed through web scraping through 17 years worth of data from <i>basketball-reference.com</i> and <i>ESPN.com</i>.
+		</p>
+		<p>
+		Once the data collection was finished, I attempted to engineer features I believed to be relevant from my knowledge of basketball. However, through the modeling process I found that the most important feature was actually the age of the player! In hindsight this makes a lot of sense because an athlete’s market value is highly dependent on what stage in his career he is at. No matter how great an athlete may be, if he is past his prime then his value is always decreasing.
+		</p>
+		<p>
+		After I was satisfied with the base features I wanted to include in my models, I created a pipeline function that would do more feature engineering and feature selection as well as feed the selected features into a dictionary of models <i>(e.g. Lasso, Ridge, RandomForest, GradientBoost)</i>. This function allowed me to also tune the hyperparameters within each model individually using the Grid Search method.
+		</p>
+		<p>
+		Overall, however, my model performed around ~50%. I went into the project hoping to reach upwards of 80-90%, so at first I believed I had fallen short and underachieved. But, soon, I came to realize that the purpose of the project wasn’t necessarily to create the perfect model, but to get me thinking like a data scientist. I was able to feature engineer so that my model <i>improved</i>. I was able to create functions to streamline my workflow and test models at a much faster rate.
+		</p>
+		<h2>Final Thoughts</h2>
+		<p>
+		This program is challenging and I’m always left feeling like I could have done better. But the focus is not on perfection, but on the process. That’s something I’ll have to keep reminding myself throughout the program and as I begin my career.
+		</p>
+		</div>
+
+	{% endblock content %}
+
+</body>
+</html>

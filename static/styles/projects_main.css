@@ -1,0 +1,44 @@
+.page-wrapper {
+	max-width: 900px;
+	width: 100%;
+	margin: auto;
+	margin-top: 100px;
+	margin-bottom: 100px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	position: relative;
+}
+
+.project {
+	width: 100%;
+	padding: 20px 0px 45px;
+	display: flex;
+	flex-direction: row;
+}
+
+.project img {
+	height: 100px;
+	width: 250px;
+	padding: 0px 15px;
+}
+
+.project .project-info {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 0px 15px;
+}
+
+.project a {
+	text-decoration: none;
+	color: black;
+}
+
+ .project img:hover {
+    opacity: 0.2;
+}
+
+.project h1:hover {
+	color:#e6e9ef;
+}

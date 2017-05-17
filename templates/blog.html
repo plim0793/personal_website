@@ -1,0 +1,30 @@
+<html>
+<head>
+{% extends "base.html" %}
+	{% block link %}
+	<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/blogs_main.css') }}">
+	{% endblock link %}
+</head>
+
+<body>
+	<nav>
+	{{ super() }}
+	</nav>
+
+	{% block content %}
+	<div class='page-wrapper'>
+	{% for blog in blogs %}
+		<div class='blog'>
+			<div class='blog-info'>
+				<a href="{{ blog.link }}">
+					<h1>{{ blog.title }}</h1>
+				</a>
+				<p><i><b>{{ blog.date }}</b></i></p>
+				<p>{{ blog.prev }}</p>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	{% endblock content %}
+</body>
+</html>

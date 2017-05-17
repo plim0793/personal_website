@@ -1,0 +1,39 @@
+<html>
+{% extends "base.html" %}
+	{% block link %}
+	<link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='styles/homepage.css') }}">
+	{% endblock link %}
+<head>
+</head>
+
+<body>
+	<nav>
+	{{ super() }}
+	</nav>
+
+	{% block content %}	
+	<div class='page-wrapper'>
+		<img src="{{ url_for('static', filename='images/homepage.jpeg') }}" class='home-pic'></img>
+		<div class='homepage'>
+			<h1>Hello!</h1>
+			<p>
+			My name is Paul Lim and I am an aspiring data scientist!  I have a B.S. in 
+			<span style="color: #0622D6; font-weight: bold;" >Chemical Engineering from UC Berkeley</span> 
+			and work experience as an environmental consultant.  In addition, I am proficient in 
+			<span style="color: #0622D6; font-weight:bold;">Python, SQL, d3.js, Machine Learning, Supervised/Unsupervised Learning,</span> 
+			and more.
+			</p>
+			<br>
+			<p>
+			For a quick look at my qualifications and background, my resume can be found <a href="/static/etc/Paul_Lim_resume.pdf" target="_blank">here</a>.
+			</p>
+			<br>
+			<p>
+			Please feel free to reach out to me at <i>plim0793@gmail.com</i> with any questions or if you just want to chat!
+			</p>
+		</div>
+	</div>
+	{% endblock %}
+
+</body>
+</html>
