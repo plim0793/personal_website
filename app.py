@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import json
 
@@ -7,7 +8,6 @@ from wtforms import fields
 from wtforms.validators import Required, InputRequired
 
 from sklearn.externals import joblib
-from textblob import TextBlob
 import numpy as np
 import pandas as pd
 
