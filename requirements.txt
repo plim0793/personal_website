@@ -44,7 +44,6 @@ datashape==0.5.2
 decorator==4.0.10
 dill==0.2.6
 docutils==0.12
-dynd==0.7.3.dev1
 en-core-web-sm==1.2.0
 et-xmlfile==1.0.1
 fake-useragent==0.1.7
