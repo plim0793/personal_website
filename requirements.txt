@@ -53,7 +53,6 @@ Flask-Cors==2.1.2
 Flask-WTF==0.14.2
 ftfy==4.4.3
 future==0.16.0
-gensim==2.1.0
 gevent==1.1.2
 graphviz==0.6
 greenlet==0.4.10
