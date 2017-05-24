@@ -104,7 +104,7 @@ packaging==16.8
 pandas==0.19.2
 parsel==1.1.0
 partd==0.3.6
-path.py==0.0.0
+path.py==10.3.1
 pathlib==1.0.1
 pathlib2==2.1.0
 patsy==0.4.1
