@@ -170,7 +170,6 @@ Sphinx==1.4.6
 sputnik==0.9.3
 spyder==3.0.2
 SQLAlchemy==1.0.13
-statsmodels==0.6.1
 sympy==1.0
 tables==3.2.3.1
 tensorflow==0.12.1
