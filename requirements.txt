@@ -170,13 +170,9 @@ Sphinx==1.4.6
 sputnik==0.9.3
 spyder==3.0.2
 SQLAlchemy==1.0.13
-tables==3.2.3.1
-termcolor==1.1.0
-terminado==0.6
 textblob==0.11.1
 thinc==6.5.2
 toolz==0.8.2
-tornado==4.4.1
 tqdm==4.11.2
 traitlets==4.3.0
 Twisted==17.1.0
