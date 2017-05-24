@@ -101,7 +101,7 @@ oauthlib==2.0.2
 odo==0.5.0
 openpyxl==2.3.2
 packaging==16.8
-pandas==1.7.1
+pandas==0.19.2
 parsel==1.1.0
 partd==0.3.6
 path.py==0.0.0
